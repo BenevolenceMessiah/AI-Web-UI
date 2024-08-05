@@ -27,18 +27,20 @@ setlocal
 
 for /f "delims=: tokens=*" %%A in ('findstr /b ::: "%~f0"') do @echo(%%A
 
-:: Install The initial audio assets for background music and soundbytes and update them.
+timeout /t 3
+
+:: Install Bootstrap_Assets for faster initial audio loading.
 echo ---------------------------------------------------------------
-echo Downloading initial dependencies...
+echo Downloading Bootstrap_Assets for faster initial audio loading!
 git lfs install
-git clone https://github.com/BenevolenceMessiah/Audio_Assets.git Audio_Assets
-cd Audio_Assets
+git clone https://github.com/BenevolenceMessiah/Bootstrap_Assets.git Bootstrap_Assets
+cd Bootstrap_Assets
 git pull
 cd ..
 
-:: Play background music from Audio_Assets
+:: Play background music from Bootstrap_Assets
 echo ---------------------------------------------------------------
-cd Audio_Assets
+cd Bootstrap_Assets
 set "file=Benevolence Messiah - Amethyst Pocket (Part I).flac"
 ( echo Set Sound = CreateObject("WMPlayer.OCX.7"^)
   echo Sound.URL = "%file%"
@@ -50,7 +52,15 @@ set "file=Benevolence Messiah - Amethyst Pocket (Part I).flac"
 start /min sound.vbs
 cd ..
 
-pause
+:: Install The initial audio assets for background music and soundbytes and update them.
+echo ---------------------------------------------------------------
+echo Downloading initial dependencies...
+echo If you want to stop the audio during the initial dependencies install or at any time, you can run 'stop_audio.bat' in either the 'Bootstrap_Assets' or 'Audio_Assets'
+git lfs install
+git clone https://github.com/BenevolenceMessiah/Audio_Assets.git Audio_Assets
+cd Audio_Assets
+git pull
+cd ..
 
 echo ---------------------------------------------------------------
 if not exist models mkdir models 
@@ -394,6 +404,7 @@ echo 3. Soundscape Oblivion - Lunar Voyagers
 echo 4. Ganja Lunar - Autumn Depression
 echo 5. HARI - ?
 echo 6. Blackmoore5050 and Benevolence Messiah - Hill Tops (Benevolence Messiah Remix)
+echo 7. ?
 echo S) Stop Audio
 echo C) Exit
 echo M) Main Menu
@@ -486,7 +497,7 @@ goto SwitchMusic
 :option17
 cd Audio_Assets
 Taskkill  /F /IM wscript.exe
-set "file=Benevolence Messiah - Amethyst Pocket (Part I).flac"
+set "file=Blackmoore5050 and Benevolence Messiah - Hill Tops (Benvolence Messiah Remix).flac"
 ( echo Set Sound = CreateObject("WMPlayer.OCX.7"^)
   echo Sound.URL = "%file%"
   echo Sound.Controls.play
