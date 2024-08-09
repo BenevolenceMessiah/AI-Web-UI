@@ -537,7 +537,7 @@ echo ---------------------------------------------------------------
 pause
 
 :: Create and activate a Python virtual environment for Text Generation AI
-echo Creating virtual environment
+echo Creating virtual environment for text generation AI...
 if not exist venv (
     py -3.10.6 -m venv venv_text_generation
 ) else (
@@ -554,12 +554,9 @@ cd Text_Generation
 start call deploy_full_windows.bat
 cd ..
 echo ---------------------------------------------------------------
-goto Menu1
-
-pause
 
 :: Create and activate a Python virtual environment for Stable Diffusion
-echo Creating virtual environment
+echo Creating virtual environment for image generation AI...
 if not exist venv (
     py -3.10.6 -m venv venv_stable_diffusion
 ) else (
@@ -573,14 +570,15 @@ call venv_stable_diffusion\Scripts\activate
 echo Downloading Stable Diffusion dependencies...
 git clone https://github.com/BenevolenceMessiah/stable-diffusion-webui.git Stable_Diffusion
 cd Stable_Diffusion
-set PYTHON= 3.10.6
+set PYTHON= py -3.10
 set GIT=
 set VENV_DIR= venv_stable_diffusion
 set COMMANDLINE_ARGS=
-call webui.bat
+start call webui.bat
 cd ..
 goto Menu1
 
+pause
 
 :: Install requirements from requirements.txt
 echo ---------------------------------------------------------------
