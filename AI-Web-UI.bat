@@ -88,6 +88,7 @@ echo U) Update all downloaded models and dependencies
 echo L) Launch...
 echo S) Stop Audio
 echo M) Switch Music
+echo Z) Switch Music (Standalone CMD Window)
 echo ---------------------------------------------------------------
 
 set /P option=Enter your choice:
@@ -99,6 +100,7 @@ if %option% == U goto Updater
 if %option% == L goto Menu4
 if %option% == S goto StopAudio
 if %option% == M goto SwitchMusic
+if %option% == Z goto LaunchStandaloneMusic
 
 :Menu2
 echo Please choose from the following options:
@@ -453,6 +455,14 @@ start call run_windows.bat
 cd ..
 goto Menu1
 
+:OptionZ
+echo Launching Standalone CMD console for music curation.
+echo ---------------------------------------------------------------
+cd Audio_Assets
+start call launch_in_standalone_console.bat
+cd ..
+go to Menu1
+
 :Updater
 echo Updating all models!
 ls | xargs -I{} git -C {} pull
@@ -618,7 +628,7 @@ git clone https://github.com/BenevolenceMessiah/text-generation-webui.git Text_G
 cd Text_Generation
 set PYTHON=
 set GIT=
-set VENV_DIR= venv_stable_diffusion
+set VENV_DIR= venv_text_generation
 set COMMANDLINE_ARGS=
 start call deploy_full_windows.bat
 cd ..
@@ -627,7 +637,7 @@ echo ---------------------------------------------------------------
 :: Create and activate a Python virtual environment for Stable Diffusion
 echo Creating virtual environment for image generation AI...
 if not exist venv (
-    python -m venv venv_stable_diffusion
+    python -m venv venv_image_generation
 ) else (
     echo Existing venv detected. Activating.
 )
@@ -637,13 +647,20 @@ call venv_stable_diffusion\Scripts\activate
 
 :: Download Stable Diffusion Dependencies
 echo Downloading Stable Diffusion dependencies...
-git clone https://github.com/BenevolenceMessiah/stable-diffusion-webui.git Stable_Diffusion
-cd Stable_Diffusion
+git clone https://github.com/BenevolenceMessiah/stable-diffusion-webui.git Image_Generation
+cd Image_Generation
 set PYTHON= py -3.10
 set GIT=
-set VENV_DIR= venv_stable_diffusion
+set VENV_DIR= venv_image_generation
 set COMMANDLINE_ARGS=
 start call webui.bat
+cd ..
+
+:: Download LivePortrait Dependencies
+echo Downloading LivePortrait dependencies...
+git clone https://github.com/BenevolenceMessiah/LivePortrait.git
+cd LivePortrait
+start call run_windows.bat
 cd ..
 goto Menu1
 
