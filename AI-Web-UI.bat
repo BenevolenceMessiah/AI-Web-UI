@@ -69,7 +69,7 @@ if not exist models mkdir models
     echo Creating 'models' directory if one does not exist.
     echo Note 1: press 'ctrl+c' at any time to exit the script/stop a download.
     echo Note 2: you can open another instance of this .bat to facilitate simultaneous model downloads.
-    echo Note 3: If something screws up at any point in time durong installation, usage, after a particularly goof Windows update, or post-modifiaction of any files, just delete the corresponding 'venv' folder and run option I) again.
+    echo Note 3: If something screws up at any point in time durong installation, usage, after a particularly goofy Windows update, or post-modifiaction of any files, just delete the corresponding 'venv' folder and run option I) again.
     echo Note 4: To stop the background audio, select option S). Alternatively, you can run the 'stop_audio.bat' script in the 'Audio_Assets' folder if you want to turn the audio off at any time or ptherwise forget to turn it off via the option in the Main Menu.
     echo Note 5: There is a standalone console launcher in the Audio_Assets folder as well rather than navigating around to switch songs or stop the music.
     echo Note 6: This program assumes you have Python 3.10.6 and Git installed!!! 
@@ -269,7 +269,7 @@ echo Lauching gguf-my-repo (once the browser launches, you can safely close the 
 echo ---------------------------------------------------------------
 @echo off
 
-start start https://huggingface.co/spaces/BenevolenceMessiah/gguf-my-repo
+start start https://huggingface.co/spaces/BenevolenceMessiah/gguf-my-repo-2
 goto Menu1
 
 :Menu3
