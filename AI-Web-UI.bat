@@ -85,6 +85,7 @@ echo B) Download image generation AI models
 echo C) Exit
 echo I) Install AI_Web_UI requirements
 echo U) Update all downloaded models and dependencies
+echo L) Launch...
 echo S) Stop Audio
 echo M) Switch Music
 echo ---------------------------------------------------------------
@@ -95,6 +96,7 @@ if %option% == B goto Menu3
 if %option% == C goto End
 if %option% == I goto Installer
 if %option% == U goto Updater
+if %option% == L goto Menu4
 if %option% == S goto StopAudio
 if %option% == M goto SwitchMusic
 
@@ -389,6 +391,68 @@ start /min sound.vbs
 cd ..
 goto Menu1
 
+:Menu4
+echo What do you want to launch?
+echo (Everything is assigned to it's own port so you shouldn't have any problems running anything simultaneously - supposing your machine has the capacity to do that).
+echo ---------------------------------------------------------------
+echo 1. Launch Text Generation WebUI
+echo 2. Launch Image Generation WebUI
+echo 3. Launch LivePortrait
+echo 4. Launch Everything!
+echo C) Exit
+echo M) Main Menu
+echo U) Update all downloaded models
+
+set /P option=Enter your choice: 
+
+if %option% == 1 goto option19
+if %option% == 2 goto option20
+if %option% == 3 goto option21
+if %option% == 4 goto option22
+if %option% == C goto end
+if %option% == M goto Menu1
+if %option% == U goto Updater
+
+:option19
+echo Launching Text Generation WebUI!
+echo ---------------------------------------------------------------
+cd Text_Generation
+start call start_windows.bat
+cd ..
+goto Menu1
+
+:option20
+echo Launching Image Generation WebUI!
+echo ---------------------------------------------------------------
+cd Stable_Diffusion
+start call update.bat
+start call run.bat
+cd ..
+goto Menu1
+
+:option21
+echo Launching LivePortrait WebUI!
+echo ---------------------------------------------------------------
+cd LivePortrait
+start call run_windows.bat
+cd ..
+goto Menu1
+
+:option22
+echo Launching Everything!
+echo ---------------------------------------------------------------
+cd Text_Generation
+start call start_windows.bat
+cd ..
+cd Stable_Diffusion
+start call update.bat
+start call run.bat
+cd ..
+cd LivePortrait
+start call run_windows.bat
+cd ..
+goto Menu1
+
 :Updater
 echo Updating all models!
 ls | xargs -I{} git -C {} pull
@@ -532,7 +596,8 @@ echo ---------------------------------------------------------------
 goto Menu1
 
 :Installer
-echo This next portion of the script will install the 'AI_Web_UI' - thats a fancy and somewhat bold attempt of mine to mash all this stuff together.
+echo This next portion of the script will install the 'AI_Web_UI.'
+echo That is a fancy and somewhat bold attempt of mine to mash all this stuff together into one installer.
 echo ---------------------------------------------------------------
 pause
 
@@ -551,6 +616,10 @@ call venv_text_generation\Scripts\activate
 echo Downloading Text Generation dependencies...
 git clone https://github.com/BenevolenceMessiah/text-generation-webui.git Text_Generation
 cd Text_Generation
+set PYTHON=
+set GIT=
+set VENV_DIR= venv_stable_diffusion
+set COMMANDLINE_ARGS=
 start call deploy_full_windows.bat
 cd ..
 echo ---------------------------------------------------------------
@@ -558,7 +627,7 @@ echo ---------------------------------------------------------------
 :: Create and activate a Python virtual environment for Stable Diffusion
 echo Creating virtual environment for image generation AI...
 if not exist venv (
-    py -3.10.6 -m venv venv_stable_diffusion
+    python -m venv venv_stable_diffusion
 ) else (
     echo Existing venv detected. Activating.
 )
