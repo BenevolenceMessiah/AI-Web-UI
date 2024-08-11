@@ -660,7 +660,7 @@ cd ..
 echo Downloading LivePortrait dependencies...
 git clone https://github.com/BenevolenceMessiah/LivePortrait.git
 cd LivePortrait
-start call run_windows.bat
+start call run_LivePortrait.bat
 cd ..
 goto Menu1
 
