@@ -660,6 +660,13 @@ cd ..
 echo Downloading LivePortrait dependencies...
 git clone https://github.com/BenevolenceMessiah/LivePortrait.git
 cd LivePortrait
+start call Run-ComfyUI.bat
+cd ..
+
+:: Download ComfyUI Dependencies
+echo Downloading ComfyUI dependencies...
+git clone https://github.com/BenevolenceMessiah/ComfyUI.git
+cd ComfyUI
 start call run_LivePortrait.bat
 cd ..
 goto Menu1
