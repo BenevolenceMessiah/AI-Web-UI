@@ -669,6 +669,13 @@ git clone https://github.com/BenevolenceMessiah/ComfyUI.git
 cd ComfyUI
 start call run_LivePortrait.bat
 cd ..
+
+:: Download Supermergekit Dependencies
+echo Downloading Supermergekit dependencies...
+git clone https://github.com/BenevolenceMessiah/Supermergekit.git
+cd Supermergekit
+start call run_Supermergekit.bat
+cd ..
 goto Menu1
 
 pause
