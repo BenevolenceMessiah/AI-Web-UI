@@ -78,13 +78,16 @@ if not exist models mkdir models
 echo ---------------------------------------------------------------
 
 :Menu1
-echo Please choose from the following options:
 echo ---------------------------------------------------------------
+echo            Please choose from the following options:          
+echo ---------------------------------------------------------------
+echo X) Install/reinstall/fix Python and Git. (Only do this if you don't have these installed
+echo    or in the event you encounter errors related to Python or Git.)
 echo A) Download text generation AI models
 echo B) Download image generation AI models
 echo C) Exit
 echo I) Install AI_Web_UI requirements
-echo U) Update all downloaded models and dependencies
+echo U) Update all downloaded models, repos, and dependencies
 echo L) Launch...
 echo S) Stop Audio
 echo M) Switch Music
@@ -92,6 +95,7 @@ echo Z) Switch Music (Standalone CMD Window)
 echo ---------------------------------------------------------------
 
 set /P option=Enter your choice:
+if %option% == X goto Python/GitInstall
 if %option% == A goto Menu2
 if %option% == B goto Menu3
 if %option% == C goto End
@@ -101,6 +105,47 @@ if %option% == L goto Menu4
 if %option% == S goto StopAudio
 if %option% == M goto SwitchMusic
 if %option% == Z goto LaunchStandaloneMusic
+
+:Python/GitInstall
+echo ---------------------------------------------------------------
+echo As-salamu alaykum!!
+echo What do you need to install?
+echo ---------------------------------------------------------------
+echo 9) Install Git.
+echo 10) Install Python 3.10. (Make sure to enable PATH)!
+echo M) Main Menu
+echo R) Restart the .bat file (do this after installing either or both of these).
+echo C) Exit
+echo ---------------------------------------------------------------
+
+set /P option=Enter your choice:
+if %option% == 9 goto GitInstall
+if %option% == 10 goto PythonInstall
+if %option% == R goto RestartCMD
+if %option% == M goto Menu1
+if %option% == C goto End
+
+:GitInstall
+echo Installing Git...
+echo ---------------------------------------------------------------
+cd /d %~dp0
+call curl "https://github.com/git-for-windows/git/releases/download/v2.46.0.windows.1/Git-2.46.0-64-bit.exe" Git-2.46.0-64-bit.exe
+start call Git-2.46.0-64-bit.exe
+goto Python/GitInstall
+
+:PythonInstall
+echo Installing Python 3.10...
+echo ---------------------------------------------------------------
+cd /d %~dp0
+call curl "https://www.python.org/ftp/python/3.10.6/python-3.10.6-amd64.exe" python-3.10.6-amd64.exe
+start call python-3.10.6-amd64.exe
+goto Python/GitInstall
+
+:RestartCMD
+echo Restarting...
+echo ---------------------------------------------------------------
+start call run_Supermergekit.bat
+exit
 
 :Menu2
 echo Please choose from the following options:
@@ -400,7 +445,9 @@ echo ---------------------------------------------------------------
 echo 1. Launch Text Generation WebUI
 echo 2. Launch Image Generation WebUI
 echo 3. Launch LivePortrait
-echo 4. Launch Everything!
+echo 4. Luanch ComfyUI
+echo 5. Launch Supermergekit
+echo 10. Launch Everything!
 echo C) Exit
 echo M) Main Menu
 echo U) Update all downloaded models
@@ -410,7 +457,9 @@ set /P option=Enter your choice:
 if %option% == 1 goto option19
 if %option% == 2 goto option20
 if %option% == 3 goto option21
-if %option% == 4 goto option22
+if %option% == 10 goto option22
+if %option% == 4 goto option23
+if %option% == 4 goto option24
 if %option% == C goto end
 if %option% == M goto Menu1
 if %option% == U goto Updater
@@ -452,6 +501,28 @@ start call run.bat
 cd ..
 cd LivePortrait
 start call run_windows.bat
+cd ..
+cd ComfyUI
+start call Run_ComfyUI.bat
+cd ..
+cd Supermergekit
+start call run_Supermergekit.bat
+cd ..
+goto Menu1
+
+:option23
+echo Launching ComfyUI!
+echo ---------------------------------------------------------------
+cd ComfyUI
+start call Run_ComfyUI.bat
+cd ..
+goto Menu1
+
+:option24
+echo Launching Supermergekit!
+echo ---------------------------------------------------------------
+cd Supermergekit
+start call run_Supermergekit.bat
 cd ..
 goto Menu1
 
@@ -614,7 +685,7 @@ pause
 :: Create and activate a Python virtual environment for Text Generation AI
 echo Creating virtual environment for text generation AI...
 if not exist venv (
-    py -3.10.6 -m venv venv_text_generation
+    py -3.10 -m venv venv_text_generation
 ) else (
     echo Existing venv detected. Activating.
 )
