@@ -2,3 +2,10 @@ Audio_Assets/
 Audio/
 Bootstrap_Assets/
 models/
+ComfyUI/
+Image_Generation/
+LivePortrait/
+Supermergekit/
+Text_Generation/
+venv_image_generation/
+venv_text_generation/

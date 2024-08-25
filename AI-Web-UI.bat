@@ -129,7 +129,7 @@ if %option% == C goto End
 echo Installing Git...
 echo ---------------------------------------------------------------
 cd /d %~dp0
-call curl "https://github.com/git-for-windows/git/releases/download/v2.46.0.windows.1/Git-2.46.0-64-bit.exe" Git-2.46.0-64-bit.exe
+call curl "https://github.com/git-for-windows/git/releases/download/v2.46.0.windows.1/Git-2.46.0-64-bit.exe" -o Git-2.46.0-64-bit.exe
 start call Git-2.46.0-64-bit.exe
 goto Python/GitInstall
 
@@ -137,13 +137,16 @@ goto Python/GitInstall
 echo Installing Python 3.10...
 echo ---------------------------------------------------------------
 cd /d %~dp0
-call curl "https://www.python.org/ftp/python/3.10.6/python-3.10.6-amd64.exe" python-3.10.6-amd64.exe
+call curl "https://www.python.org/ftp/python/3.10.6/python-3.10.6-amd64.exe" -o python-3.10.6-amd64.exe
 start call python-3.10.6-amd64.exe
 goto Python/GitInstall
 
 :RestartCMD
 echo Restarting...
+echo Deleting installer .exe files if they exist...
 echo ---------------------------------------------------------------
+if exist Git-2.46.0-64-bit.exe del Git-2.46.0-64-bit.exe
+if exist python-3.10.6-amd64.exe del python-3.10.6-amd64.exe
 start call run_Supermergekit.bat
 exit
 
@@ -439,15 +442,21 @@ cd ..
 goto Menu1
 
 :Menu4
+echo ---------------------------------------------------------------
 echo What do you want to launch?
 echo (Everything is assigned to it's own port so you shouldn't have any problems running anything simultaneously - supposing your machine has the capacity to do that).
 echo ---------------------------------------------------------------
-echo 1. Launch Text Generation WebUI
-echo 2. Launch Image Generation WebUI
-echo 3. Launch LivePortrait
-echo 4. Luanch ComfyUI
-echo 5. Launch Supermergekit
-echo 10. Launch Everything!
+echo 1) Launch Text Generation WebUI
+echo 2) Launch Image Generation WebUI
+echo 3) Launch LivePortrait
+echo 4) Luanch ComfyUI
+echo 5) Launch Supermergekit (Standalone)
+echo 6) Launch mergekit remotley via Google Colab Notebook.
+echo 7) Launch mergekit remotley via HuggingFace Spaces.
+echo 8) Launch gguf-my-repo remotely via HuggingFace Spaces (Tool that 
+echo    allows for the search and GGUF conversion of any Transformers model on Huggingface.)
+echo 9) Launch remotely: unsloth via Google Colab Notebook.
+echo 10) Launch Everything!
 echo C) Exit
 echo M) Main Menu
 echo U) Update all downloaded models
@@ -459,7 +468,11 @@ if %option% == 2 goto option20
 if %option% == 3 goto option21
 if %option% == 10 goto option22
 if %option% == 4 goto option23
-if %option% == 4 goto option24
+if %option% == 5 goto option24
+if %option% == 6 goto option25
+if %option% == 7 goto option26
+if %option% == 8 goto option27
+if %option% == 9 goto option28
 if %option% == C goto end
 if %option% == M goto Menu1
 if %option% == U goto Updater
@@ -524,6 +537,29 @@ echo ---------------------------------------------------------------
 cd Supermergekit
 start call run_Supermergekit.bat
 cd ..
+goto Menu1
+
+:option25
+echo Launching mergekit remotley via Google Colab Notebook.
+echo ---------------------------------------------------------------
+start start https://colab.research.google.com/drive/1TcXuBLbGMsuDazv5eEuVc7rgXVNKsJ__
+goto Menu1
+
+:option26
+echo Running mergekit-gui via HuggingFace
+echo ---------------------------------------------------------------
+start start https://huggingface.co/spaces/arcee-ai/mergekit-gui
+goto Menu1
+
+:option27
+echo Launching gguf-my repo
+echo ---------------------------------------------------------------
+start start https://huggingface.co/spaces/BenevolenceMessiah/gguf-my-repo-2
+goto Menu1
+
+:option28
+echo Launching unsloth
+start start https://colab.research.google.com/drive/1Ys44kVvmeZtnICzWz0xgpRnrIOjZAuxp?usp=sharing
 goto Menu1
 
 :OptionZ
@@ -683,70 +719,81 @@ echo ---------------------------------------------------------------
 pause
 
 :: Create and activate a Python virtual environment for Text Generation AI
-echo Creating virtual environment for text generation AI...
-if not exist venv (
-    py -3.10 -m venv venv_text_generation
-) else (
-    echo Existing venv detected. Activating.
-)
+::echo Creating virtual environment for text generation AI...
+::if not exist venv (
+::    py -3.10 -m venv venv_text_generation
+::) else (
+::    echo Existing venv detected. Activating.
+::)
 
-echo Activating virtual environment
-call venv_text_generation\Scripts\activate
+::echo Activating virtual environment
+::call venv_text_generation\Scripts\activate
 
 :: Download Text Generation Dependencies
 echo Downloading Text Generation dependencies...
+echo ---------------------------------------------------------------
 git clone https://github.com/BenevolenceMessiah/text-generation-webui.git Text_Generation
 cd Text_Generation
-set PYTHON=
-set GIT=
-set VENV_DIR= venv_text_generation
-set COMMANDLINE_ARGS=
+:: set PYTHON=
+:: set GIT=
+:: set VENV_DIR= .venv_Text_Generation
+:: set COMMANDLINE_ARGS=
 start call deploy_full_windows.bat
 cd ..
 echo ---------------------------------------------------------------
 
 :: Create and activate a Python virtual environment for Stable Diffusion
-echo Creating virtual environment for image generation AI...
-if not exist venv (
-    python -m venv venv_image_generation
-) else (
-    echo Existing venv detected. Activating.
-)
+::echo Creating virtual environment for image generation AI...
+::if not exist venv (
+::    python -m venv venv_image_generation
+::) else (
+::    echo Existing venv detected. Activating.
+::)
 
-echo Activating virtual environment
-call venv_stable_diffusion\Scripts\activate
+::echo Activating virtual environment
+::call venv_stable_diffusion\Scripts\activate
 
 :: Download Stable Diffusion Dependencies
 echo Downloading Stable Diffusion dependencies...
+echo ---------------------------------------------------------------
 git clone https://github.com/BenevolenceMessiah/stable-diffusion-webui.git Image_Generation
 cd Image_Generation
 set PYTHON= py -3.10
 set GIT=
-set VENV_DIR= venv_image_generation
-set COMMANDLINE_ARGS=
+set VENV_DIR= .venv
+set COMMANDLINE_ARGS= --reinstall-xformers
 start call webui.bat
 cd ..
+echo ---------------------------------------------------------------
 
 :: Download LivePortrait Dependencies
 echo Downloading LivePortrait dependencies...
+echo ---------------------------------------------------------------
 git clone https://github.com/BenevolenceMessiah/LivePortrait.git
+:: set VENV_DIR= .venv_LivePortrait
 cd LivePortrait
-start call Run-ComfyUI.bat
+start call run_LivePortrait.bat
 cd ..
+echo ---------------------------------------------------------------
 
 :: Download ComfyUI Dependencies
 echo Downloading ComfyUI dependencies...
+echo ---------------------------------------------------------------
 git clone https://github.com/BenevolenceMessiah/ComfyUI.git
+:: set VENV_DIR= .venv_ComfyUI
 cd ComfyUI
-start call run_LivePortrait.bat
+start call Run-ComfyUI.bat
 cd ..
+echo ---------------------------------------------------------------
 
 :: Download Supermergekit Dependencies
 echo Downloading Supermergekit dependencies...
+echo ---------------------------------------------------------------
 git clone https://github.com/BenevolenceMessiah/Supermergekit.git
 cd Supermergekit
 start call run_Supermergekit.bat
 cd ..
+echo ---------------------------------------------------------------
 goto Menu1
 
 pause
