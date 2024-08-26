@@ -446,36 +446,56 @@ echo ---------------------------------------------------------------
 echo What do you want to launch?
 echo (Everything is assigned to it's own port so you shouldn't have any problems running anything simultaneously - supposing your machine has the capacity to do that).
 echo ---------------------------------------------------------------
+echo                       Generative Web UIs:
 echo 1) Launch Text Generation WebUI
 echo 2) Launch Image Generation WebUI
-echo 3) Launch LivePortrait
-echo 4) Luanch ComfyUI
-echo 5) Launch Supermergekit (Standalone)
+echo 3) Launch LivePortrait (Face manipulation)
+echo 4) Launch ComfyUI (Node based UI)
+echo             Training/Finetuning/Extraction/Converting:
+echo 5) Launch Supermergekit (Standalone mergekit, Supermerger, unsloth, and RVC client)
 echo 6) Launch mergekit remotley via Google Colab Notebook.
 echo 7) Launch mergekit remotley via HuggingFace Spaces.
 echo 8) Launch gguf-my-repo remotely via HuggingFace Spaces (Tool that 
 echo    allows for the search and GGUF conversion of any Transformers model on Huggingface.)
-echo 9) Launch remotely: unsloth via Google Colab Notebook.
-echo 10) Launch Everything!
+echo 9) Launch unsloth remotely via Google Colab Notebook.
+echo                           AI Agents:
+echo 10) Launch AutoGPT (a powerful tool that lets you create and run intelligent
+echo     agents. These agents can perform various tasks automatically, making your 
+echo     life easier.)
+echo 11) Launch AgentK (The autoagentic AGI. AgentK is a self-evolving AGI made
+echo     of agents that collaborate, and build new agents as needed, in order 
+echo     to complete tasks for a user.)
+echo 12) Launch self-hosted-ai-starter-kit (an open, docker compose template that
+echo     quickly bootstraps a fully featured Local AI and Low Code development
+echo     environment.)
+echo 13) Launch LeRobot (State-of-the-art AI for real-world robotics)
+echo                             Extra:
+echo 100) Launch Everything!
 echo C) Exit
 echo M) Main Menu
 echo U) Update all downloaded models
+echo Z) Switch Music (Standalone CMD Window)
 
 set /P option=Enter your choice: 
 
 if %option% == 1 goto option19
 if %option% == 2 goto option20
 if %option% == 3 goto option21
-if %option% == 10 goto option22
+if %option% == 100 goto option22
 if %option% == 4 goto option23
 if %option% == 5 goto option24
 if %option% == 6 goto option25
 if %option% == 7 goto option26
 if %option% == 8 goto option27
 if %option% == 9 goto option28
+if %option% == 10 goto option29
+if %option% == 11 goto option30
+if %option% == 12 goto option31
+if %option% == 13 goto option32
 if %option% == C goto end
 if %option% == M goto Menu1
 if %option% == U goto Updater
+if %option% == Z goto LaunchStandaloneMusic
 
 :option19
 echo Launching Text Generation WebUI!
@@ -521,6 +541,18 @@ cd ..
 cd Supermergekit
 start call run_Supermergekit.bat
 cd ..
+cd AutoGPT
+start call Run_AutoGPT.bat
+cd ..
+cd AgentK
+start call Run_AgentK.bat
+cd ..
+cd self-hosted-ai-starter-kit
+start call self-hosted-ai-starter-kit.bat
+cd ..
+cd lerobot
+start call Run_lerobot.bat
+cd ..
 goto Menu1
 
 :option23
@@ -559,10 +591,43 @@ goto Menu1
 
 :option28
 echo Launching unsloth
+echo ---------------------------------------------------------------
 start start https://colab.research.google.com/drive/1Ys44kVvmeZtnICzWz0xgpRnrIOjZAuxp?usp=sharing
 goto Menu1
 
-:OptionZ
+:option29
+echo Launching AutoGPT
+echo ---------------------------------------------------------------
+cd AutoGPT
+start call Run_AutoGPT.bat
+cd ..
+goto Menu1
+
+:option30
+echo Launching AgentK
+echo ---------------------------------------------------------------
+cd AgentK
+start call Run_AgentK.bat
+cd ..
+goto Menu1
+
+:option31
+echo Launching self-hosted-ai-starter-kit
+echo ---------------------------------------------------------------
+cd self-hosted-ai-starter-kit
+start call elf-hosted-ai-starter-kit.bat
+cd ..
+goto Menu1
+
+:option32
+echo Launching LeRobot
+echo ---------------------------------------------------------------
+cd lerobot
+start call Run_lerobot.bat
+cd ..
+goto Menu1
+
+:LaunchStandaloneMusic
 echo Launching Standalone CMD console for music curation.
 echo ---------------------------------------------------------------
 cd Audio_Assets
@@ -792,6 +857,33 @@ echo ---------------------------------------------------------------
 git clone https://github.com/BenevolenceMessiah/Supermergekit.git
 cd Supermergekit
 start call run_Supermergekit.bat
+cd ..
+echo ---------------------------------------------------------------
+
+:: Download AutoGPT Dependencies
+echo Downloading AutoGPT dependencies...
+echo ---------------------------------------------------------------
+git clone https://github.com/BenevolenceMessiah/AutoGPT.git
+cd AutoGPT
+start call Run_AutoGPT.bat
+cd ..
+echo ---------------------------------------------------------------
+
+:: Download AgentK Dependencies
+echo Downloading AgentK dependencies...
+echo ---------------------------------------------------------------
+git clone https://github.com/BenevolenceMessiah/AgentK.git
+cd AgentK
+start call Run_AgentK.bat
+cd ..
+echo ---------------------------------------------------------------
+
+:: Download self-hosted-ai-starter-kit Dependencies
+echo Downloading self-hosted-ai-starter-kit dependencies...
+echo ---------------------------------------------------------------
+git clone https://github.com/BenevolenceMessiah/self-hosted-ai-starter-kit.git
+cd self-hosted-ai-starter-kit
+start call Run_self-hosted-ai-starter-kit.bat
 cd ..
 echo ---------------------------------------------------------------
 goto Menu1
