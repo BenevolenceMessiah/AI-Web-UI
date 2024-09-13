@@ -30,6 +30,7 @@ for /f "delims=: tokens=*" %%A in ('findstr /b ::: "%~f0"') do @echo(%%A
 timeout /t 3
 
 :: Install Bootstrap_Assets for faster initial audio loading.
+if exist Bootstrap_Assets goto Launch
 echo ---------------------------------------------------------------
 echo Downloading Bootstrap_Assets for faster initial audio loading!
 git lfs install
@@ -39,6 +40,7 @@ git pull
 cd ..
 
 :: Play background music from Bootstrap_Assets
+:Launch
 echo ---------------------------------------------------------------
 cd Bootstrap_Assets
 set "file=Benevolence Messiah - Amethyst Pocket (Part I).flac"
@@ -53,6 +55,7 @@ start /min sound.vbs
 cd ..
 
 :: Install The initial audio assets for background music and soundbytes and update them.
+if exist Audio_Assets goto Launch2
 echo ---------------------------------------------------------------
 echo Downloading initial dependencies...
 echo If you want to stop the audio during the initial dependencies install or at any time, you can run 'stop_audio.bat' in either the 'Bootstrap_Assets' or 'Audio_Assets'
@@ -62,20 +65,34 @@ cd Audio_Assets
 git pull
 cd ..
 
+:Launch2
 echo ---------------------------------------------------------------
 if not exist models mkdir models 
 
     echo As-salamu alaikum;
     echo Creating 'models' directory if one does not exist.
+    echo ---------------------------------------------------------------
+    echo                               Notes:
     echo Note 1: press 'ctrl+c' at any time to exit the script/stop a download.
     echo Note 2: you can open another instance of this .bat to facilitate simultaneous model downloads.
-    echo Note 3: If something screws up at any point in time durong installation, usage, after a particularly goofy Windows update, or post-modifiaction of any files, just delete the corresponding 'venv' folder and run option I) again.
-    echo Note 4: To stop the background audio, select option S). Alternatively, you can run the 'stop_audio.bat' script in the 'Audio_Assets' folder if you want to turn the audio off at any time or ptherwise forget to turn it off via the option in the Main Menu.
-    echo Note 5: There is a standalone console launcher in the Audio_Assets folder as well rather than navigating around to switch songs or stop the music.
+    echo Note 3: If something screws up at any point in time durong installation, usage, after a 
+    echo         particularly goofy Windows update, or post-modifiaction of any files, just delete 
+    echo         the corresponding 'venv' folder and run option I) again.
+    echo Note 4: To stop the background audio, select option S). Alternatively, you can run the
+    echo         'stop_audio.bat' script in the 'Audio_Assets' folder if you want to turn the audio off
+    echo         at any time or ptherwise forget to turn it off via the option in the Main Menu.
+    echo Note 5: There is a standalone console launcher in the Audio_Assets folder as well rather than
+    echo         navigating around to switch songs or stop the music.
     echo Note 6: This program assumes you have Python 3.10.6 and Git installed!!! 
-    echo https://www.python.org/ftp/python/3.10.6/python-3.10.6-amd64.exe
-    echo https://github.com/git-for-windows/git/releases/download/v2.46.0.windows.1/Git-2.46.0-64-bit.exe
-echo ---------------------------------------------------------------
+    echo         https://www.python.org/ftp/python/3.10.6/python-3.10.6-amd64.exe
+    echo         https://github.com/git-for-windows/git/releases/download/v2.46.0.windows.1/Git-2.46.0-64-bit.exe
+    echo         - If you don't have one or either of these installed, either paste these URLs into your browser or,
+    echo           even easier, use option 'B' from the following Main Menu. In any case, with Python, make sure to
+    echo           set PATH.
+    echo ---------------------------------------------------------------
+timeout /t -1    
+goto Menu1
+
 
 :Menu1
 echo ---------------------------------------------------------------
@@ -147,7 +164,7 @@ echo Deleting installer .exe files if they exist...
 echo ---------------------------------------------------------------
 if exist Git-2.46.0-64-bit.exe del Git-2.46.0-64-bit.exe
 if exist python-3.10.6-amd64.exe del python-3.10.6-amd64.exe
-start call run_Supermergekit.bat
+start call AI-Web-UI.bat
 exit
 
 :Menu2
@@ -444,20 +461,30 @@ goto Menu1
 :Menu4
 echo ---------------------------------------------------------------
 echo What do you want to launch?
-echo (Everything is assigned to it's own port so you shouldn't have any problems running anything simultaneously - supposing your machine has the capacity to do that).
+echo (Everything is assigned to it's own port so you shouldn't have any problems running
+echo anything simultaneously - supposing your machine has the capacity to do that).
 echo ---------------------------------------------------------------
-echo                       Generative Web UIs:
-echo 1) Launch Text Generation WebUI
-echo 2) Launch Image Generation WebUI
-echo 3) Launch LivePortrait (Face manipulation)
-echo 4) Launch ComfyUI (Node based UI)
+echo               Generative Text/Multimodal Web UI's:
+echo 1) Launch Text Generation WebUI (A Gradio web UI for Large Language Models.)
+echo B) Launch torchchat (Via Streamlit web app.)
+echo ---------------------------------------------------------------
+echo                   Generative Image Web UI's:
+echo 2) Launch Image Generation WebUI (A web interface for Stable Diffusion, implemented
+echo    using Gradio library.)
+echo 3) Launch LivePortrait (Efficient portrait animation with stitching and retargeting 
+echo    control.)
+echo 4) Launch ComfyUI (This UI will let you design and execute advanced stable diffusion 
+echo    pipelines using a graph/nodes/flowchart based interface.)
+echo ---------------------------------------------------------------
 echo             Training/Finetuning/Extraction/Converting:
-echo 5) Launch Supermergekit (Standalone mergekit, Supermerger, unsloth, and RVC client)
+echo 5) Launch Supermergekit (All-in-one integrated and standalone mergekit, Supermerger,
+echo    unsloth, RVC client, and associated training, extraction, and finetuning tools.)
 echo 6) Launch mergekit remotley via Google Colab Notebook.
 echo 7) Launch mergekit remotley via HuggingFace Spaces.
 echo 8) Launch gguf-my-repo remotely via HuggingFace Spaces (Tool that 
 echo    allows for the search and GGUF conversion of any Transformers model on Huggingface.)
 echo 9) Launch unsloth remotely via Google Colab Notebook.
+echo ---------------------------------------------------------------
 echo                           AI Agents:
 echo 10) Launch AutoGPT (a powerful tool that lets you create and run intelligent
 echo     agents. These agents can perform various tasks automatically, making your 
@@ -468,13 +495,28 @@ echo     to complete tasks for a user.)
 echo 12) Launch self-hosted-ai-starter-kit (an open, docker compose template that
 echo     quickly bootstraps a fully featured Local AI and Low Code development
 echo     environment.)
-echo 13) Launch LeRobot (State-of-the-art AI for real-world robotics)
+echo 13) Launch LeRobot (State-of-the-art AI for real-world robotics.)
+echo 14) Launch gptme (Interact with an LLM assistant directly in your terminal and/or web
+echo     UI in a Chat-style interface. With tools so the assistant can run shell commands, execute
+echo     code, read/write files, and more, enabling them to assist in all kinds of
+echo     development and terminal-based work.)
+echo ---------------------------------------------------------------
+echo                    Datasets/Scrapers/Crawlers:
+echo 15) Launch Firecrawler 
+echo 16) Launch ScrapeMaster
+echo 17) Launch ???
+echo ---------------------------------------------------------------
 echo                             Extra:
+echo 18) Launch Distrubted Llama (split the workload of LLMs across multiple devices and
+echo     achieve a significant speedup. Distributed Llama allows you to run huge LLMs in-house.
+echo     The project uses TCP sockets to synchronize the state. You can easily configure your AI
+echo     cluster by using a home router.)
 echo 100) Launch Everything!
 echo C) Exit
 echo M) Main Menu
 echo U) Update all downloaded models
 echo Z) Switch Music (Standalone CMD Window)
+echo ---------------------------------------------------------------
 
 set /P option=Enter your choice: 
 
@@ -492,6 +534,11 @@ if %option% == 10 goto option29
 if %option% == 11 goto option30
 if %option% == 12 goto option31
 if %option% == 13 goto option32
+if %option% == 14 goto option33
+if %option% == 15 goto option34
+if %option% == 16 goto option35
+if %option% == 17 goto option36
+if %option% == 18 goto option37
 if %option% == C goto end
 if %option% == M goto Menu1
 if %option% == U goto Updater
@@ -624,6 +671,22 @@ echo Launching LeRobot
 echo ---------------------------------------------------------------
 cd lerobot
 start call Run_lerobot.bat
+cd ..
+goto Menu1
+
+:option33
+echo Launching gptme
+echo ---------------------------------------------------------------
+cd gptme
+start call Run_gptme.bat
+cd ..
+goto Menu1
+
+:option34
+echo Launching Distributed Llama
+echo ---------------------------------------------------------------
+cd distributed-llama
+start call Run_distributed-llama.bat
 cd ..
 goto Menu1
 
@@ -796,9 +859,18 @@ pause
 
 :: Download Text Generation Dependencies
 echo Downloading Text Generation dependencies...
+echo                   Text Generation WebUI: 
+echo (A Gradio web UI for Large Language Models.)
 echo ---------------------------------------------------------------
+echo 1) Continue Installation
+echo 2) Skip Installation
+set /P option=Enter your choice:
+if %option% == 1 goto Continue1
+if %option% == 2 goto Skip1
+:Continue1
 git clone https://github.com/BenevolenceMessiah/text-generation-webui.git Text_Generation
 cd Text_Generation
+git pull
 :: set PYTHON=
 :: set GIT=
 :: set VENV_DIR= .venv_Text_Generation
@@ -819,10 +891,21 @@ echo ---------------------------------------------------------------
 ::call venv_stable_diffusion\Scripts\activate
 
 :: Download Stable Diffusion Dependencies
+:Skip1
 echo Downloading Stable Diffusion dependencies...
+echo                 Image Generation WebUI:
+echo (A web interface for Stable Diffusion, implemented
+echo using Gradio library.)
 echo ---------------------------------------------------------------
+echo 1) Continue Installation
+echo 2) Skip Installation
+set /P option=Enter your choice:
+if %option% == 1 goto Continue2
+if %option% == 2 goto Skip2
+:Continue2
 git clone https://github.com/BenevolenceMessiah/stable-diffusion-webui.git Image_Generation
 cd Image_Generation
+git pull
 set PYTHON= py -3.10
 set GIT=
 set VENV_DIR= .venv
@@ -831,62 +914,244 @@ start call webui.bat
 cd ..
 echo ---------------------------------------------------------------
 
+:Skip2
 :: Download LivePortrait Dependencies
 echo Downloading LivePortrait dependencies...
+echo                      LivePortrait:
+echo (Efficient portrait animation with stitching and retargeting 
+echo control.)
 echo ---------------------------------------------------------------
+echo 1) Continue Installation
+echo 2) Skip Installation
+set /P option=Enter your choice:
+if %option% == 1 goto Continue3
+if %option% == 2 goto Skip3
+:Continue3
 git clone https://github.com/BenevolenceMessiah/LivePortrait.git
 :: set VENV_DIR= .venv_LivePortrait
 cd LivePortrait
 start call run_LivePortrait.bat
+git pull
 cd ..
 echo ---------------------------------------------------------------
 
+:Skip3
 :: Download ComfyUI Dependencies
 echo Downloading ComfyUI dependencies...
+echo                          ComfyUI:
+echo (This UI will let you design and execute advanced stable diffusion 
+echo pipelines using a graph/nodes/flowchart based interface.)
 echo ---------------------------------------------------------------
+echo 1) Continue Installation
+echo 2) Skip Installation
+set /P option=Enter your choice:
+if %option% == 1 goto Continue4
+if %option% == 2 goto Skip4
+:Continue4
 git clone https://github.com/BenevolenceMessiah/ComfyUI.git
 :: set VENV_DIR= .venv_ComfyUI
 cd ComfyUI
+git pull
 start call Run-ComfyUI.bat
 cd ..
 echo ---------------------------------------------------------------
 
+:Skip4
 :: Download Supermergekit Dependencies
 echo Downloading Supermergekit dependencies...
+echo                       Supermergekit:
+echo (All-in-one integrated and standalone mergekit, Supermerger, unsloth, 
+echo RVC client, and associated training, extraction, and finetuning tools.)
+echo !!                               !!
+echo !!(Highly Recommended to Install)!!
+echo !!                               !!
 echo ---------------------------------------------------------------
+echo 1) Continue Installation
+echo 2) Skip Installation
+set /P option=Enter your choice:
+if %option% == 1 goto Continue5
+if %option% == 2 goto Skip5
+:Continue5
 git clone https://github.com/BenevolenceMessiah/Supermergekit.git
 cd Supermergekit
+git pull
 start call run_Supermergekit.bat
 cd ..
 echo ---------------------------------------------------------------
 
+:Skip5
 :: Download AutoGPT Dependencies
 echo Downloading AutoGPT dependencies...
+echo                          AutoGPT:
+echo (A powerful tool that lets you create and run intelligent
+echo agents. These agents can perform various tasks automatically, making your 
+echo life easier.)
 echo ---------------------------------------------------------------
+echo 1) Continue Installation
+echo 2) Skip Installation
+set /P option=Enter your choice:
+if %option% == 1 goto Continue6
+if %option% == 2 goto Skip6
+:Continue6
 git clone https://github.com/BenevolenceMessiah/AutoGPT.git
 cd AutoGPT
+git pull
 start call Run_AutoGPT.bat
 cd ..
 echo ---------------------------------------------------------------
 
+:Skip6
 :: Download AgentK Dependencies
 echo Downloading AgentK dependencies...
+echo                            AgentK:
+echo (The autoagentic AGI. AgentK is a self-evolving AGI made
+echo of agents that collaborate, and build new agents as needed, in order 
+echo to complete tasks for a user.)
 echo ---------------------------------------------------------------
+echo 1) Continue Installation
+echo 2) Skip Installation
+set /P option=Enter your choice:
+if %option% == 1 goto Continue7
+if %option% == 2 goto Skip7
+:Continue7
 git clone https://github.com/BenevolenceMessiah/AgentK.git
 cd AgentK
+git pull
 start call Run_AgentK.bat
 cd ..
 echo ---------------------------------------------------------------
 
+:Skip7
 :: Download self-hosted-ai-starter-kit Dependencies
 echo Downloading self-hosted-ai-starter-kit dependencies...
+echo                 self-hosted-ai-starter-kit:
+echo (An open, docker compose template that quickly bootstraps a fully featured
+echo Local AI and Low Code development environment.)
 echo ---------------------------------------------------------------
+echo 1) Continue Installation
+echo 2) Skip Installation
+set /P option=Enter your choice:
+if %option% == 1 goto Continue8
+if %option% == 2 goto Skip8
+:Continue8
 git clone https://github.com/BenevolenceMessiah/self-hosted-ai-starter-kit.git
 cd self-hosted-ai-starter-kit
+git pull
 start call Run_self-hosted-ai-starter-kit.bat
 cd ..
 echo ---------------------------------------------------------------
+
+:Skip8
+:: Download LeRobot Dependencies
+echo Downloading LeRobot dependencies...
+echo                             LeRobot:
+echo (State-of-the-art AI for real-world robotics.)
+echo ---------------------------------------------------------------
+echo 1) Continue Installation
+echo 2) Skip Installation
+set /P option=Enter your choice:
+if %option% == 1 goto Continue9
+if %option% == 2 goto Skip9
+:Continue9
+git clone https://github.com/BenevolenceMessiah/lerobot.git
+cd lerobot
+git pull
+start call Run_lerobot.bat
+cd ..
+echo ---------------------------------------------------------------
+
+:Skip9
+:: Download gptme Dependencies
+echo Downloading gptme dependencies...
+echo                           gptme:
+echo (Interact with an LLM assistant directly in your terminal and/or web
+echo UI in a Chat-style interface. With tools so the assistant can run shell commands, execute
+echo code, read/write files, and more, enabling them to assist in all kinds of
+echo development and terminal-based work.)
+echo ---------------------------------------------------------------
+echo 1) Continue Installation
+echo 2) Skip Installation
+set /P option=Enter your choice:
+if %option% == 1 goto Continue10
+if %option% == 2 goto Skip10
+:Continue10
+git clone https://github.com/BenevolenceMessiah/gptme.git
+cd gptme
+git pull
+start call Run_gptme.bat
+cd ..
+echo ---------------------------------------------------------------
+
+
+:Skip10
+:: Download Distributed Llama Dependencies
+echo Downloading Distributed Llama dependencies...
+echo                     Distributed Llama:
+echo (Split the workload of LLMs across multiple devices and
+echo achieve a significant speedup. Distributed Llama allows you to run huge LLMs in-house.
+echo The project uses TCP sockets to synchronize the state. You can easily configure your AI
+echo cluster by using a home router.)
+echo ---------------------------------------------------------------
+echo 1) Continue Installation
+echo 2) Skip Installation
+set /P option=Enter your choice:
+if %option% == 1 goto Continue11
+if %option% == 2 goto Skip11
+:Continue11
+git clone https://github.com/BenevolenceMessiah/distributed-llama.git
+cd distributed-llama
+git pull
+start call Run_distributed-llama.bat
+cd ..
+echo ---------------------------------------------------------------
+
+:Skip11
+:: Download torchchat Dependencies
+echo Downloading torchchat dependencies...
+echo                     torchchat:
+echo a small codebase showcasing the ability to run large language models (LLMs)
+echo seamlessly. With torchchat, you can run LLMs using Python, within your own 
+echo (C/C++) application (desktop or server) and on iOS and Android.
+echo ---------------------------------------------------------------
+echo 1) Continue Installation
+echo 2) Skip Installation
+set /P option=Enter your choice:
+if %option% == 1 goto Continue12
+if %option% == 2 goto Skip12
+:Continue12
+git clone https://github.com/BenevolenceMessiah/torchchat.git
+cd torchchat
+git pull
+start call Run_torchchat.bat
+cd ..
+echo ---------------------------------------------------------------
+
+:Skip12
+:: Download CogVideo-Toolkit Dependencies
+echo Downloading CogVideo-Toolkit dependencies...
+echo                     CogVideo-Toolkit:
+echo CogVideoX is an open-source version of the video generation model originating
+echo from QingYing. This Toolkit utilizes the various python modules for CLI and 
+echo Gradio inferences using either a 2b or 5b parameter model.
+echo ---------------------------------------------------------------
+echo 1) Continue Installation
+echo 2) Skip Installation
+set /P option=Enter your choice:
+if %option% == 1 goto Continue13
+if %option% == 2 goto Skip13
+:Continue13
+git clone https://github.com/BenevolenceMessiah/CogVideo-Toolkit.git
+cd CogVideo-Toolkit
+git pull
+start call Run_CogVideo-Toolkit.bat
+cd ..
+echo ---------------------------------------------------------------
+
+echo Base installations completed!
+echo All selected installer files launched!
+echo ---------------------------------------------------------------
 goto Menu1
+
 
 pause
 
